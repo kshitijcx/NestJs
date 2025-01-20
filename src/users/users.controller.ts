@@ -20,7 +20,7 @@ export class UsersController {
     DELETE /users/:id
    */
   @Get()
-  findAll(@Query('role') role?: 'intern' | 'engineer' | 'admin ') {
+  findAll(@Query('role') role?: 'INTERN' | 'ENGINEER' | 'ADMIN') {
     //since role is optional, therefore ? after role
     return ['list of users'];
   }
@@ -34,8 +34,8 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() man: {}) {
-    return man;
+  create(@Body() user: {}) {
+    return user;
   }
 
   @Patch(':id')
