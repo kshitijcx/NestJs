@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { UsersService } from './users.service';
 
 // decorators are predefined functions that run auto when called
 @Controller('users') // /users
@@ -19,10 +20,13 @@ export class UsersController {
     PATCH /users/:id
     DELETE /users/:id
    */
+
+  constructor(private readonly usersService: UsersService) {} //const usersSevice = new UsersService(); //not exactly same, it handles extra stuff as well
+
   @Get()
   findAll(@Query('role') role?: 'INTERN' | 'ENGINEER' | 'ADMIN') {
     //since role is optional, therefore ? after role
-    return ['list of users'];
+    return this.usersService.findAll(role);
   }
 
   //@Get("products") /users/products
@@ -30,21 +34,36 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return { id };
+    return this.usersService.findOne(+id); //unary plus -> all params are strings but we are expecting a number in findOne method
   }
 
   @Post()
-  create(@Body() user: {}) {
-    return user;
+  create(
+    @Body()
+    user: {
+      name: string;
+      email: string;
+      role: 'INTERN' | 'ENGINEER' | 'ADMIN';
+    },
+  ) {
+    return this.usersService.create(user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() userUpdate: {}) {
-    return { id, ...userUpdate };
+  update(
+    @Param('id') id: string,
+    @Body()
+    userUpdate: {
+      name?: string;
+      email?: string;
+      role?: 'INTERN' | 'ENGINEER' | 'ADMIN';
+    },
+  ) {
+    return this.usersService.update(+id, userUpdate);
   }
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return { id };
+    return this.usersService.delele(+id);
   }
 }
