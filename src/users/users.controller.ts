@@ -8,9 +8,11 @@ import {
   Post,
   Query,
   ParseIntPipe,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './dto/create-user-dto';
+import { CreateUserDto } from './dto/create-user-dto';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 // decorators are predefined functions that run auto when called
 @Controller('users') // /users
@@ -42,7 +44,7 @@ export class UsersController {
 
   @Post()
   create(
-    @Body()
+    @Body(ValidationPipe)
     user: CreateUserDto,
   ) {
     return this.usersService.create(user);
@@ -51,7 +53,7 @@ export class UsersController {
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body()
+    @Body(ValidationPipe)
     userUpdate: UpdateUserDto,
   ) {
     return this.usersService.update(id, userUpdate);
